@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="{{ lang }}" dir="{{ 'rtl' if lang == 'ar' else 'ltr' }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }}</title>
+  <meta name="description" content="{{ meta_description }}">
+  <link rel="canonical" href="{{ canonical }}">
+  <link rel="alternate" hreflang="en" href="{{ alternate_en }}">
+  <link rel="alternate" hreflang="ar" href="{{ alternate_ar }}">
+  <link rel="alternate" hreflang="x-default" href="{{ alternate_en }}">
+  <meta property="og:type" content="{{ og_type }}">
+  <meta property="og:title" content="{{ title }}">
+  <meta property="og:description" content="{{ meta_description }}">
+  <meta property="og:image" content="{{ og_image }}">
+  <meta property="og:url" content="{{ canonical }}">
+  <meta property="og:locale" content="{{ 'ar_YE' if lang == 'ar' else 'en_US' }}">
+  <meta property="og:locale:alternate" content="{{ 'en_US' if lang == 'ar' else 'ar_YE' }}">
+  <meta property="og:site_name" content="{{ site_name }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ title }}">
+  <meta name="twitter:description" content="{{ meta_description }}">
+  <meta name="twitter:image" content="{{ og_image }}">
+  <link rel="icon" type="image/svg+xml" href="/static/img/favicon.svg">
+  <link rel="icon" type="image/png" href="/static/img/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&family=JetBrains+Mono:wght@400;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/main.css">
+  {% if cf_analytics_token %}
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "{{ cf_analytics_token }}"}'></script>
+  {% endif %}
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <a class="skip-link" href="#main">{{ t('skip_to_content') }}</a>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="{{ home_path }}">
+        <span class="brand-mark" aria-hidden="true">MH</span>
+        <span class="brand-name">Mohammed Alhariri</span>
+      </a>
+
+      <nav class="site-nav" id="site-nav" aria-label="{{ t('nav.menu') }}">
+        <button class="nav-toggle" id="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+          <span class="nav-toggle-label">{{ t('nav.menu') }}</span>
+          <span class="nav-toggle-icon" aria-hidden="true"></span>
+        </button>
+        <ul class="nav-menu" id="nav-menu">
+          <li><a href="{{ home_path }}#about">{{ t('nav.about') }}</a></li>
+          <li><a href="{{ home_path }}#skills">{{ t('nav.skills') }}</a></li>
+          <li><a href="{{ home_path }}#experience">{{ t('nav.experience') }}</a></li>
+          <li><a href="{{ home_path }}#education">{{ t('nav.education') }}</a></li>
+          <li><a href="{{ home_path }}#certificates">{{ t('nav.certificates') }}</a></li>
+          <li><a href="{{ home_path }}#projects">{{ t('nav.projects') }}</a></li>
+          <li><a href="{{ home_path }}#testimonials">{{ t('nav.testimonials') }}</a></li>
+          <li><a href="{{ home_path }}#contact">{{ t('nav.contact') }}</a></li>
+          <li class="nav-lang">
+            <a href="{{ switch_url }}" hreflang="{{ 'ar' if lang == 'en' else 'en' }}" lang="{{ 'ar' if lang == 'en' else 'en' }}">
+              {% if lang == 'en' %}{{ t('lang.ar') }}{% else %}{{ t('lang.en') }}{% endif %}
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p class="footer-note mono">© {{ profile.name if profile else 'Mohammed Alhariri' }} · {{ t('footer.rights') }}</p>
+      <p class="footer-built mono">{{ t('footer.built_with') }}</p>
+    </div>
+  </footer>
+
+  <script src="/static/js/main.js" defer></script>
+</body>
+</html>

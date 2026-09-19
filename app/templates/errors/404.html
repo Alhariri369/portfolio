@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="error-page">
+  <div class="container">
+    <p class="section-label mono">404</p>
+    <h1 class="error-title">{{ t('errors.not_found_title') }}</h1>
+    <p class="error-message">{{ t('errors.not_found_message') }}</p>
+    <a class="btn btn--primary" href="{{ home_path }}">{{ t('errors.back_home') }}</a>
+  </div>
+</section>
+{% endblock %}

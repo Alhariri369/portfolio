@@ -1,0 +1,168 @@
+2026-09-18T13:12:29.874Z [DEBUG] MDM settings load completed in 7ms
+2026-09-18T13:12:29.942Z [DEBUG] Broken symlink or missing file encountered for settings.json at path: C:\Program Files\ClaudeCode\managed-settings.json
+2026-09-18T13:12:30.230Z [DEBUG] Broken symlink or missing file encountered for settings.json at path: E:\Git_files\portfolio\.claude\settings.json
+2026-09-18T13:12:30.231Z [DEBUG] Broken symlink or missing file encountered for settings.json at path: E:\Git_files\portfolio\.claude\settings.local.json
+2026-09-18T13:12:30.232Z [DEBUG] CA certs: Config fallback - globalEnv keys: , settingsEnv keys: none
+2026-09-18T13:12:30.251Z [DEBUG] [init] configureGlobalMTLS starting
+2026-09-18T13:12:30.252Z [DEBUG] [init] configureGlobalMTLS complete
+2026-09-18T13:12:30.253Z [DEBUG] [init] configureGlobalAgents starting
+2026-09-18T13:12:30.253Z [DEBUG] CA certs: stores=bundled,system, extraCertsPath=undefined
+2026-09-18T13:12:30.253Z [DEBUG] CA certs: Loaded 121 bundled root certificates
+2026-09-18T13:12:30.282Z [DEBUG] CA certs: Dropped 18 expired certificate(s) from system store
+2026-09-18T13:12:30.283Z [DEBUG] CA certs: Loaded 109 system CA certificates
+2026-09-18T13:12:30.283Z [DEBUG] mTLS: Creating HTTPS agent with custom certificates
+2026-09-18T13:12:30.283Z [DEBUG] [init] configureGlobalAgents complete
+2026-09-18T13:12:30.286Z [DEBUG] Using bash path: "C:\Program Files\Git\bin\bash.exe"
+2026-09-18T13:12:30.290Z [DEBUG] Error log sink initialized
+2026-09-18T13:12:30.312Z [DEBUG] [Claude in Chrome] Disabled: OAuth token has no scope accepted by /api/oauth/validate (needs user:profile, user:office, or user:ccr_inference; env-var and setup-token sessions default to user:inference only)
+2026-09-18T13:12:30.327Z [DEBUG] [ToolSearch:optimistic] disabled: ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic is not a first-party Anthropic host. Set ENABLE_TOOL_SEARCH=true (or auto / auto:N) if your proxy forwards tool_reference blocks.
+2026-09-18T13:12:30.553Z [DEBUG] [STARTUP] Loading MCP configs...
+2026-09-18T13:12:30.554Z [DEBUG] [STARTUP] Running setup()...
+2026-09-18T13:12:30.563Z [DEBUG] Broken symlink or missing file encountered for settings.json at path: C:\Program Files\ClaudeCode\managed-settings.json
+2026-09-18T13:12:30.565Z [DEBUG] Broken symlink or missing file encountered for settings.json at path: E:\Git_files\portfolio\.claude\settings.json
+2026-09-18T13:12:30.565Z [DEBUG] Broken symlink or missing file encountered for settings.json at path: E:\Git_files\portfolio\.claude\settings.local.json
+2026-09-18T13:12:30.566Z [DEBUG] Error log sink initialized
+2026-09-18T13:12:30.573Z [DEBUG] installed_plugins.json doesn't exist, returning empty V2 object
+2026-09-18T13:12:30.574Z [DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+2026-09-18T13:12:30.574Z [DEBUG] Total plugin workflows loaded: 0
+2026-09-18T13:12:30.575Z [DEBUG] Loading skills from: managed=C:\Program Files\ClaudeCode\.claude\skills, user=C:\Users\G.B\.claude\skills, project=[]
+2026-09-18T13:12:30.575Z [DEBUG] [reduced mode] Skipping skill dir discovery
+2026-09-18T13:12:30.575Z [DEBUG] [STARTUP] setup() completed in 21ms
+2026-09-18T13:12:30.578Z [DEBUG] [STARTUP] Loading commands and agents...
+2026-09-18T13:12:30.579Z [DEBUG] getSkills returning: 0 skill dir commands, 0 plugin skills, 40 bundled skills, 0 builtin plugin skills
+2026-09-18T13:12:30.592Z [DEBUG] [STARTUP] Commands and agents loaded in 14ms
+2026-09-18T13:12:30.599Z [DEBUG] nonBlockingStdout: not installed (unsupported_platform)
+2026-09-18T13:12:30.601Z [DEBUG] [STARTUP] Running showSetupScreens()...
+2026-09-18T13:12:30.843Z [DEBUG] Git remote URL: null
+2026-09-18T13:12:30.843Z [DEBUG] No git remote URL found
+2026-09-18T13:12:30.863Z [DEBUG] Cleared mTLS configuration cache
+2026-09-18T13:12:30.863Z [DEBUG] Cleared proxy agent cache
+2026-09-18T13:12:30.863Z [DEBUG] mTLS: Creating HTTPS agent with custom certificates
+2026-09-18T13:12:30.867Z [DEBUG] [STARTUP] showSetupScreens() completed in 266ms
+2026-09-18T13:12:30.869Z [DEBUG] Skipping startup prefetches, last ran 1789737151s ago
+2026-09-18T13:12:30.871Z [DEBUG] [STARTUP] MCP configs resolved in 1ms (awaited at +318ms)
+2026-09-18T13:12:30.882Z [DEBUG] Fast mode unavailable: Fast mode is currently unavailable
+2026-09-18T13:12:30.960Z [DEBUG] [win32-kernel32] bun:ffi loaded
+2026-09-18T13:12:30.964Z [DEBUG] [sessionRegistry] sweep permitted (domain win32:desktop-ovop2up)
+2026-09-18T13:12:30.980Z [DEBUG] [Perfetto] initializePerfettoTracing called, env value: undefined
+2026-09-18T13:12:30.981Z [DEBUG] [3P telemetry] isTelemetryEnabled=false (CLAUDE_CODE_ENABLE_TELEMETRY=undefined)
+2026-09-18T13:12:31.349Z [DEBUG] Lock acquisition took longer than expected - another Claude instance may be running
+2026-09-18T13:12:31.415Z [DEBUG] Preserving file permissions: 100666
+2026-09-18T13:12:31.415Z [DEBUG] Writing to temp file: C:\Users\G.B\.claude.json.tmp.8408.b7ed92f599bc
+2026-09-18T13:12:31.461Z [DEBUG] Applied original permissions to temp file
+2026-09-18T13:12:31.483Z [DEBUG] Temp file written successfully, size: 44593 bytes
+2026-09-18T13:12:31.484Z [DEBUG] Renaming C:\Users\G.B\.claude.json.tmp.8408.b7ed92f599bc to C:\Users\G.B\.claude.json
+2026-09-18T13:12:31.497Z [DEBUG] File C:\Users\G.B\.claude.json written atomically
+2026-09-18T13:12:31.498Z [DEBUG] Git remote URL: null
+2026-09-18T13:12:31.498Z [DEBUG] No git remote URL found
+2026-09-18T13:12:31.498Z [DEBUG] Not in a GitHub repository, skipping path mapping update
+2026-09-18T13:12:31.514Z [DEBUG] Preserving file permissions: 100666
+2026-09-18T13:12:31.514Z [DEBUG] Writing to temp file: C:\Users\G.B\.claude.json.tmp.8408.7e85b46ac148
+2026-09-18T13:12:31.516Z [DEBUG] Applied original permissions to temp file
+2026-09-18T13:12:31.520Z [DEBUG] Temp file written successfully, size: 44770 bytes
+2026-09-18T13:12:31.520Z [DEBUG] Renaming C:\Users\G.B\.claude.json.tmp.8408.7e85b46ac148 to C:\Users\G.B\.claude.json
+2026-09-18T13:12:31.522Z [DEBUG] File C:\Users\G.B\.claude.json written atomically
+2026-09-18T13:12:31.622Z [DEBUG] [keybindings] KeybindingSetup initialized with 228 bindings, 0 warnings
+2026-09-18T13:12:31.629Z [DEBUG] Artifact input schema built: capabilities=true comments=true db=true assets=false files=true types=false type_catalog=false read_page_data=false room=false verify=false delete=true copy_from=false preview=false open=false endpoints=false pin=true flag_source=payload gb_fresh=true assets_source=cold_no_identity
+2026-09-18T13:12:31.693Z [DEBUG] Fast mode unavailable: Fast mode is currently unavailable
+2026-09-18T13:12:31.761Z [DEBUG] [engine] send set_max_thinking_tokens max=null
+2026-09-18T13:12:31.762Z [DEBUG] [engine] send set_model model=claude-sonnet-5
+2026-09-18T13:12:31.816Z [DEBUG] [claudeai-mcp] Disabled: API-key auth precedence active
+2026-09-18T13:12:31.824Z [DEBUG] performStartupChecks called
+2026-09-18T13:12:31.824Z [DEBUG] Starting background plugin installations
+2026-09-18T13:12:31.836Z [DEBUG] [jobStateNameSync] watch skipped: Error: ENOENT: no such file or directory, watch 'C:\Users\G.B\.claude\jobs\ec4bf4f3'
+2026-09-18T13:12:31.844Z [DEBUG] No CLAUDE.md/rules files found
+2026-09-18T13:12:31.849Z [DEBUG] FileHistory: Added snapshot for 75205328-d5a2-48f4-90b4-f61a88023617, tracking 0 files
+2026-09-18T13:12:31.866Z [DEBUG] [REPL:mount] REPL mounted, disabled=false
+2026-09-18T13:12:31.868Z [DEBUG] Official marketplace auto-install skipped: already_installed
+2026-09-18T13:12:31.893Z [DEBUG] [ScheduledTasks] scheduler start() — enabled=false, hasTasks=false
+2026-09-18T13:12:31.898Z [DEBUG] Broken symlink or missing file encountered for settings.json at path: E:\Git_files\portfolio\.claude\settings.json
+2026-09-18T13:12:31.899Z [DEBUG] Broken symlink or missing file encountered for settings.json at path: E:\Git_files\portfolio\.claude\settings.local.json
+2026-09-18T13:12:31.900Z [DEBUG] Broken symlink or missing file encountered for settings.json at path: C:\Program Files\ClaudeCode\managed-settings.json
+2026-09-18T13:12:31.972Z [DEBUG] performBackgroundPluginInstallations called
+2026-09-18T13:12:31.974Z [DEBUG] installed plugins' hooks modules not loaded: rollout flag (tengu_plugin_hooks_modules) is off, from the default (a cold GrowthBook cache, no payload yet); built-in plugins load regardless
+2026-09-18T13:12:31.974Z [DEBUG] sec-default@builtin not seated: installed plugins' hooks modules are off in this process
+2026-09-18T13:12:31.975Z [DEBUG] Total plugin workflows loaded: 0
+2026-09-18T13:12:31.976Z [DEBUG] Plugin autoupdate: skipped (auto-updater disabled)
+2026-09-18T13:12:31.991Z [DEBUG] getSkills returning: 0 skill dir commands, 0 plugin skills, 40 bundled skills, 0 builtin plugin skills
+2026-09-18T13:12:31.992Z [DEBUG] [auto-mode] verifyAutoModeGateAccess: enabledState=enabled disabledBySettings=false model=claude-sonnet-5 modelSupported=true disableFastModeBreakerFires=false carouselAvailable=true canEnterAuto=true
+2026-09-18T13:12:31.996Z [DEBUG] Registered 0 hooks from 0 plugins
+2026-09-18T13:12:32.024Z [DEBUG] session.start: raised (surface terminal, interactive)
+2026-09-18T13:12:32.044Z [WARN] [3P telemetry] Event dropped (no event logger initialized): user_prompt
+2026-09-18T13:12:32.048Z [DEBUG] FileHistory: Making snapshot for message f06ed683-aee4-47b3-b6e5-2686321e898f
+2026-09-18T13:12:32.061Z [DEBUG] FileHistory: Added snapshot for f06ed683-aee4-47b3-b6e5-2686321e898f, tracking 0 files
+2026-09-18T13:12:32.069Z [DEBUG] [engine] yield system/init (first)
+2026-09-18T13:12:32.076Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.276.faf; cc_entrypoint=cli;
+2026-09-18T13:12:32.078Z [DEBUG] Fast mode unavailable: Fast mode is currently unavailable
+2026-09-18T13:12:32.081Z [DEBUG] Fast mode unavailable: Fast mode is currently unavailable
+2026-09-18T13:12:32.088Z [DEBUG] [engine] turn 1 start
+2026-09-18T13:12:32.106Z [DEBUG] autocompact: tokens=[REDACTED] level=ok effectiveWindow=180000
+2026-09-18T13:12:32.140Z [DEBUG] attribution header x-anthropic-billing-header: cc_version=2.1.276.537; cc_entrypoint=cli;
+2026-09-18T13:12:32.141Z [DEBUG] Fast mode unavailable: Fast mode is currently unavailable
+2026-09-18T13:12:32.142Z [DEBUG] Fast mode unavailable: Fast mode is currently unavailable
+2026-09-18T13:12:32.146Z [DEBUG] [keybindings] Watching for changes to C:\Users\G.B\.claude\keybindings.json
+2026-09-18T13:12:32.373Z [DEBUG] Fast mode unavailable: Fast mode is currently unavailable
+2026-09-18T13:12:32.374Z [DEBUG] [API:timing] dispatching to firstParty model=claude-sonnet-5
+2026-09-18T13:12:32.377Z [DEBUG] Fast mode unavailable: Fast mode is currently unavailable
+2026-09-18T13:12:32.379Z [DEBUG] [API:timing] dispatching to firstParty model=claude-sonnet-5
+2026-09-18T13:12:32.384Z [DEBUG] [API REQUEST] /anthropic/v1/messages source=generate_session_title
+2026-09-18T13:12:32.387Z [DEBUG] [API REQUEST] /anthropic/v1/messages source=repl_main_thread
+2026-09-18T13:12:32.608Z [DEBUG] Total plugin agents loaded: 0
+2026-09-18T13:12:32.611Z [DEBUG] Loaded plugins - Enabled: 0, Disabled: 0, Commands: 0, Agents: 0, Errors: 0
+2026-09-18T13:12:32.614Z [DEBUG] Lock acquisition took longer than expected - another Claude instance may be running
+2026-09-18T13:12:32.687Z [DEBUG] [FileIndex] getProjectFiles called, respectGitignore=true
+2026-09-18T13:12:32.687Z [DEBUG] [FileIndex] getFilesUsingGit called
+2026-09-18T13:12:32.739Z [DEBUG] XTVERSION: no reply (terminal ignored query)
+2026-09-18T13:12:32.740Z [DEBUG] Terminal capabilities: extendedKeys=no (env: terminal=zed, no answer); synchronizedOutput=yes (env: ZED_TERM, no answer); kittyKeyboard=no (probe: no reply to CSI ? u); kittyGraphics=no (env: terminal=zed, not asked yet, no answer); terminal said: no reply to CSI ? u; DECRQM 2026 not asked (no XTVERSION reply)
+2026-09-18T13:12:32.740Z [DEBUG] DECSTBM: enabled (TMUX=unset ZELLIJ=unset TERM_PROGRAM=zed TERM=xterm-256color)
+2026-09-18T13:12:32.794Z [DEBUG] Failed to stat directory C:\Program Files\ClaudeCode\.claude\commands: ENOENT: no such file or directory, stat 'C:\Program Files\ClaudeCode\.claude\commands'
+2026-09-18T13:12:32.794Z [DEBUG] Failed to stat directory C:\Program Files\ClaudeCode\.claude\agents: ENOENT: no such file or directory, stat 'C:\Program Files\ClaudeCode\.claude\agents'
+2026-09-18T13:12:32.794Z [DEBUG] Failed to stat directory C:\Users\G.B\.claude\commands: ENOENT: no such file or directory, stat 'C:\Users\G.B\.claude\commands'
+2026-09-18T13:12:32.795Z [DEBUG] Failed to stat directory C:\Users\G.B\.claude\agents: ENOENT: no such file or directory, stat 'C:\Users\G.B\.claude\agents'
+2026-09-18T13:12:32.796Z [DEBUG] Failed to stat directory C:\Program Files\ClaudeCode\.claude\skills: ENOENT: no such file or directory, stat 'C:\Program Files\ClaudeCode\.claude\skills'
+2026-09-18T13:12:32.796Z [DEBUG] Failed to stat directory C:\Users\G.B\.claude\output-styles: ENOENT: no such file or directory, stat 'C:\Users\G.B\.claude\output-styles'
+2026-09-18T13:12:32.796Z [DEBUG] Failed to stat directory C:\Program Files\ClaudeCode\.claude\output-styles: ENOENT: no such file or directory, stat 'C:\Program Files\ClaudeCode\.claude\output-styles'
+2026-09-18T13:12:32.797Z [DEBUG] Failed to stat directory C:\Program Files\ClaudeCode\.claude\workflows: ENOENT: no such file or directory, stat 'C:\Program Files\ClaudeCode\.claude\workflows'
+2026-09-18T13:12:32.797Z [DEBUG] Failed to stat directory C:\Users\G.B\.claude\routines: ENOENT: no such file or directory, stat 'C:\Users\G.B\.claude\routines'
+2026-09-18T13:12:32.797Z [DEBUG] Failed to stat directory C:\Program Files\ClaudeCode\.claude\routines: ENOENT: no such file or directory, stat 'C:\Program Files\ClaudeCode\.claude\routines'
+2026-09-18T13:12:32.798Z [DEBUG] Failed to stat directory C:\Users\G.B\.claude\workflows: ENOENT: no such file or directory, stat 'C:\Users\G.B\.claude\workflows'
+2026-09-18T13:12:32.821Z [DEBUG] Preserving file permissions: 100666
+2026-09-18T13:12:32.821Z [DEBUG] Writing to temp file: C:\Users\G.B\.claude.json.tmp.8408.074fe5c6133d
+2026-09-18T13:12:32.844Z [DEBUG] Applied original permissions to temp file
+2026-09-18T13:12:32.859Z [DEBUG] Temp file written successfully, size: 43548 bytes
+2026-09-18T13:12:32.859Z [DEBUG] Renaming C:\Users\G.B\.claude.json.tmp.8408.074fe5c6133d to C:\Users\G.B\.claude.json
+2026-09-18T13:12:32.861Z [DEBUG] File C:\Users\G.B\.claude.json written atomically
+2026-09-18T13:12:32.905Z [DEBUG] Preserving file permissions: 100666
+2026-09-18T13:12:32.905Z [DEBUG] Writing to temp file: C:\Users\G.B\.claude.json.tmp.8408.c88eae8125c0
+2026-09-18T13:12:32.907Z [DEBUG] Applied original permissions to temp file
+2026-09-18T13:12:32.910Z [DEBUG] Temp file written successfully, size: 43549 bytes
+2026-09-18T13:12:32.910Z [DEBUG] Renaming C:\Users\G.B\.claude.json.tmp.8408.c88eae8125c0 to C:\Users\G.B\.claude.json
+2026-09-18T13:12:32.914Z [DEBUG] File C:\Users\G.B\.claude.json written atomically
+2026-09-18T13:12:32.919Z [DEBUG] [FileIndex] git ls-files (tracked) took 232ms
+2026-09-18T13:12:32.920Z [DEBUG] [FileIndex] git ls-files: 0 tracked files in 233ms
+2026-09-18T13:12:32.938Z [DEBUG] [FileIndex] using git ls-files result (0 files)
+2026-09-18T13:12:32.938Z [DEBUG] [FileIndex] cache refresh completed in 252ms
+2026-09-18T13:12:33.112Z [DEBUG] Stream started - received first chunk
+2026-09-18T13:12:33.112Z [DEBUG] [API:timing] first byte after 735ms
+2026-09-18T13:12:33.159Z [DEBUG] [FileIndex] background untracked fetch: 9 files
+2026-09-18T13:12:33.159Z [DEBUG] [FileIndex] rebuilt index with 0 tracked + 9 untracked files
+2026-09-18T13:12:33.160Z [DEBUG] Stream started - received first chunk
+2026-09-18T13:12:33.160Z [DEBUG] [API:timing] first byte after 788ms
+2026-09-18T13:12:33.223Z [ERROR] Failed to fetch oauth profile from API key: AxiosError: Request failed with status code 401
+2026-09-18T13:12:33.561Z [DEBUG] [engine] turn 1 end (turns=1 usage in=2366 out=11 cost=$0.0048 api=2742ms stop=end_turn resultLen=9)
+2026-09-18T13:12:33.608Z [DEBUG] [sessionRegistry] sweep permitted (domain win32:desktop-ovop2up)
+2026-09-18T13:12:34.306Z [DEBUG] Preserving file permissions: 100666
+2026-09-18T13:12:34.306Z [DEBUG] Writing to temp file: C:\Users\G.B\.claude.json.tmp.8408.fddba95b5e72
+2026-09-18T13:12:34.307Z [DEBUG] Applied original permissions to temp file
+2026-09-18T13:12:34.338Z [DEBUG] Temp file written successfully, size: 43597 bytes
+2026-09-18T13:12:34.338Z [DEBUG] Renaming C:\Users\G.B\.claude.json.tmp.8408.fddba95b5e72 to C:\Users\G.B\.claude.json
+2026-09-18T13:12:34.339Z [DEBUG] File C:\Users\G.B\.claude.json written atomically
+2026-09-18T13:12:39.651Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-global
+2026-09-18T13:12:41.890Z [DEBUG] Preserving file permissions: 100666
+2026-09-18T13:12:41.890Z [DEBUG] Writing to temp file: C:\Users\G.B\.claude.json.tmp.8408.e781a7d464b3
+2026-09-18T13:12:41.895Z [DEBUG] Applied original permissions to temp file
+2026-09-18T13:12:41.905Z [DEBUG] Temp file written successfully, size: 43420 bytes
+2026-09-18T13:12:41.905Z [DEBUG] Renaming C:\Users\G.B\.claude.json.tmp.8408.e781a7d464b3 to C:\Users\G.B\.claude.json
+2026-09-18T13:12:41.906Z [DEBUG] File C:\Users\G.B\.claude.json written atomically
+2026-09-18T13:12:41.907Z [DEBUG] fullscreen boot canary: healthy
+2026-09-18T13:17:30.987Z [DEBUG] [Anthropic telemetry] BigQuery metrics export: credential does not belong to the metrics endpoint host, skipping

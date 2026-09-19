@@ -1,0 +1,26 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+.pytest_cache/
+
+# Virtual environments
+.venv
+venv/
+
+# Secrets & local environment
+.env
+
+# Runtime data (uploads live here; the DB is remote)
+data/
+app.db
+*.db
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

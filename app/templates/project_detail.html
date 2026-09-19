@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<article class="project-detail">
+  <div class="container">
+    <a class="back-link mono" href="{{ home_path }}#projects">← {{ t('projects.back') }}</a>
+
+    <header class="project-header">
+      <div class="project-meta">
+        {% if project.featured %}<span class="tag tag--featured">{{ t('projects.featured') }}</span>{% endif %}
+      </div>
+      <h1 class="project-title">{{ pick(project, 'title') }}</h1>
+      <p class="project-summary">{{ pick(project, 'summary') }}</p>
+      {% if project.skills %}
+        <ul class="chip-list mono">
+          {% for skill in project.skills %}<li class="chip">{{ pick(skill, 'name') }}</li>{% endfor %}
+        </ul>
+      {% endif %}
+      <div class="project-links">
+        {% if project.repo_url %}
+          <a class="btn" href="{{ project.repo_url }}" target="_blank" rel="noopener">{{ t('projects.repo') }}</a>
+        {% endif %}
+        {% if project.live_url %}
+          <a class="btn btn--primary" href="{{ project.live_url }}" target="_blank" rel="noopener">{{ t('projects.live') }}</a>
+        {% endif %}
+      </div>
+    </header>
+
+    {% if project.images %}
+      <div class="project-gallery">
+        {% for image in project.images %}
+          <figure class="project-figure">
+            <img src="{{ asset_url(image.url) }}" alt="{{ pick(image, 'alt') }}" width="1280" height="720" loading="lazy">
+          </figure>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="project-description">
+      {% set lines = (pick(project, 'description') or '').split('\n') | select | list %}
+      {% if lines and lines[0].startswith('- ') %}
+        <ul class="bullets">
+          {% for line in lines %}<li>{{ line[2:] }}</li>{% endfor %}
+        </ul>
+      {% else %}
+        {% for line in lines %}<p>{{ line }}</p>{% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</article>
+{% endblock %}

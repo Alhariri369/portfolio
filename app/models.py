@@ -26,7 +26,8 @@ class Profile(Base):
     __tablename__ = "profile"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(200), default="")
+    name_en: Mapped[str] = mapped_column(String(200), default="")
+    name_ar: Mapped[str] = mapped_column(String(200), default="")
     title_en: Mapped[str] = mapped_column(String(200), default="")
     title_ar: Mapped[str] = mapped_column(String(200), default="")
     tagline_en: Mapped[str] = mapped_column(String(500), default="")

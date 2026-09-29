@@ -1,9 +1,9 @@
 """SQLAdmin setup and HTTP Basic Auth guard for /admin.
 
-Uploads are handled by a small custom FileField that writes to UPLOAD_DIR and
-stores the resulting filename in the (String) model column, so the public site
-serves them through the /uploads static mount.
+Uploads go to Cloudflare R2 via app.storage; the resulting public URL is
+stored in the (String) model column, so the public site renders it directly.
 """
+
 from __future__ import annotations
 
 import base64
@@ -15,7 +15,7 @@ from pathlib import Path
 from sqladmin import Admin, ModelView
 from sqladmin.fields import FileField
 
-from app.config import ADMIN_PASSWORD, ADMIN_USERNAME, UPLOAD_DIR
+from app.config import ADMIN_PASSWORD, ADMIN_USERNAME
 from app.db import engine
 from app.models import (
     Certificate,
@@ -29,6 +29,7 @@ from app.models import (
     SocialLink,
     Testimonial,
 )
+from app.storage import upload_fileobj
 
 # Sentinel meaning "clear this file" (produced by the clear checkbox widget).
 _CLEAR = "__sqladmin_clear__"
@@ -55,12 +56,8 @@ def _safe_filename(filename: str) -> str:
     return name
 
 
-class LocalFileField(FileField):
-    """A FileField that saves uploads locally and stores the filename."""
-
-    def __init__(self, label=None, validators=None, storage=None, **kwargs):
-        self.storage = Path(storage) if storage else UPLOAD_DIR
-        super().__init__(label, validators, **kwargs)
+class R2FileField(FileField):
+    """A FileField that uploads to Cloudflare R2 and stores the public URL."""
 
     def process_formdata(self, valuelist):
         if not valuelist:
@@ -69,15 +66,14 @@ class LocalFileField(FileField):
 
         value = valuelist[0]
 
-        # An empty string means the browser submitted an untouched file input.
-        # Return None and let FileUploadMixin restore the existing value.
+        # Untouched file input: browser submits an empty string.
         if isinstance(value, str):
             self.data = value or None
             return
 
         filename = getattr(value, "filename", None)
         if not filename:
-            # No filename: the "clear" checkbox produced an empty upload.
+            # Clear checkbox produced an empty upload.
             self.data = _CLEAR
             return
 
@@ -86,12 +82,15 @@ class LocalFileField(FileField):
             self.data = None
             return
 
+        content_type = (
+            getattr(value, "content_type", None) or "application/octet-stream"
+        )
         safe = _safe_filename(filename)
-        unique = f"{Path(safe).stem}-{uuid.uuid4().hex[:8]}{Path(safe).suffix}"
-        self.storage.mkdir(parents=True, exist_ok=True)
+        key = f"uploads/{uuid.uuid4().hex[:12]}-{safe}"
+
         fileobj.seek(0)
-        (self.storage / unique).write_bytes(fileobj.read())
-        self.data = unique
+        url = upload_fileobj(fileobj, key, content_type=content_type)
+        self.data = url
 
 
 class FileUploadMixin:
@@ -134,16 +133,10 @@ class ProfileAdmin(FileUploadMixin, ModelView, model=Profile):
         "og_image_url",
     ]
     form_overrides = {
-        "avatar_url": LocalFileField,
-        "banner_url": LocalFileField,
-        "resume_pdf_url": LocalFileField,
-        "og_image_url": LocalFileField,
-    }
-    form_args = {
-        "avatar_url": {"storage": str(UPLOAD_DIR)},
-        "banner_url": {"storage": str(UPLOAD_DIR)},
-        "resume_pdf_url": {"storage": str(UPLOAD_DIR)},
-        "og_image_url": {"storage": str(UPLOAD_DIR)},
+        "avatar_url": R2FileField,
+        "banner_url": R2FileField,
+        "resume_pdf_url": R2FileField,
+        "og_image_url": R2FileField,
     }
 
 
@@ -153,7 +146,14 @@ class SkillAdmin(ModelView, model=Skill):
 
 
 class ExperienceAdmin(ModelView, model=Experience):
-    column_list = ["id", "role_en", "company_en", "start_date", "end_date", "sort_order"]
+    column_list = [
+        "id",
+        "role_en",
+        "company_en",
+        "start_date",
+        "end_date",
+        "sort_order",
+    ]
     form_columns = [
         "company_en",
         "company_ar",
@@ -213,8 +213,7 @@ class ProjectImageAdmin(FileUploadMixin, ModelView, model=ProjectImage):
     file_columns = ("url",)
     column_list = ["id", "project_id", "url", "sort_order"]
     form_columns = ["project", "url", "alt_en", "alt_ar", "sort_order"]
-    form_overrides = {"url": LocalFileField}
-    form_args = {"url": {"storage": str(UPLOAD_DIR)}}
+    form_overrides = {"url": R2FileField}
 
 
 class SocialLinkAdmin(ModelView, model=SocialLink):
@@ -224,7 +223,15 @@ class SocialLinkAdmin(ModelView, model=SocialLink):
 
 class TestimonialAdmin(ModelView, model=Testimonial):
     column_list = ["id", "author_en", "role_en", "published"]
-    form_columns = ["author_en", "author_ar", "role_en", "role_ar", "text_en", "text_ar", "published"]
+    form_columns = [
+        "author_en",
+        "author_ar",
+        "role_en",
+        "role_ar",
+        "text_en",
+        "text_ar",
+        "published",
+    ]
 
 
 class ContactMessageAdmin(ModelView, model=ContactMessage):
@@ -239,7 +246,7 @@ class ContactMessageAdmin(ModelView, model=ContactMessage):
 def setup_admin(app) -> Admin:
     """Mount SQLAdmin at /admin and register every model."""
     admin = Admin(app, engine, title="Portfolio Admin", base_url="/admin")
-    admin.add_view(ProfileAdmin)
+    admin.add_base_view(ProfileAdmin)
     admin.add_view(SkillAdmin)
     admin.add_view(ExperienceAdmin)
     admin.add_view(EducationAdmin)

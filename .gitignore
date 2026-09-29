@@ -24,3 +24,6 @@ app.db
 Thumbs.db
 .idea/
 .vscode/
+
+.vercel
+.env*

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import time
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
@@ -23,7 +24,6 @@ from app.config import (
     EMAIL_FROM,
     EMAIL_TO,
     SITE_URL,
-    UPLOAD_DIR,
 )
 from app.db import Base, engine, get_db
 from app.email import send_contact_email
@@ -40,6 +40,7 @@ from app.models import (
     Testimonial,
 )
 from app.schemas import ContactForm
+from app.storage import public_url_base
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -63,13 +64,13 @@ _AR_MONTHS = [
 # Jinja globals
 # --------------------------------------------------------------------------- #
 def asset_url(value: Any) -> str:
-    """Turn a stored filename into a /uploads/ URL (or pass absolute URLs through)."""
+    """Turn a stored filename into a full R2 URL (or pass absolute URLs through)."""
     if not value:
         return ""
     value = str(value)
     if value.startswith(("http://", "https://", "/", "data:")):
         return value
-    return "/uploads/" + value.lstrip("/")
+    return f"{public_url_base()}/{value.lstrip('/')}"
 
 
 def project_url(slug: str) -> str:
@@ -443,6 +444,5 @@ def healthz():
 # --------------------------------------------------------------------------- #
 setup_admin(app)
 
-UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
-app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
+# /static ships with the deployment, safe everywhere.
 app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")

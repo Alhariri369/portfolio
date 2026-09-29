@@ -11,9 +11,11 @@ BASE_DIR = APP_DIR.parent
 # Never hardcode credentials - they come from the environment (.env in Docker).
 DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./app.db")
 
-# Uploads live under /data/uploads in Docker (mounted volume) and under
-# app/static/uploads for local development.
-UPLOAD_DIR = Path(os.getenv("UPLOAD_DIR", APP_DIR / "static" / "uploads")).resolve()
+# Uploads location.
+#   - Vercel: only /tmp is writable. It is ephemeral (wiped on cold start),
+#     so treat this as temporary storage only.
+#   - Docker: UPLOAD_DIR env var points to a mounted volume (e.g. /data/uploads).
+#   - Local dev: falls back to app/static/uploads.
 
 SITE_URL = os.getenv("BASE_URL", "https://hariri-dev.com").rstrip("/")
 

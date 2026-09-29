@@ -196,7 +196,7 @@ def _home_context(db: Session, lang: str, form_errors: dict | None = None,
     socials = db.scalars(select(SocialLink).order_by(SocialLink.sort_order)).all()
 
     if profile is not None:
-        title = f"{profile.ar_name} — {pick_localized(profile, 'title', lang)}"
+        title = f"{profile.name_ar} — {pick_localized(profile, 'title', lang)}"
         meta_description = pick_localized(profile, "tagline", lang) or translate("meta.description", lang)
     else:
         title = translate("meta.title", lang)

@@ -275,8 +275,10 @@ def _save_contact(db: Session, form: ContactForm, *, is_spam: bool) -> ContactMe
 # --------------------------------------------------------------------------- #
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    Base.metadata.create_all(bind=engine)
+    if os.getenv("CREATE_TABLES") == "1":
+        Base.metadata.create_all(bind=engine)
     yield
+
 
 
 app = FastAPI(title="Mohammed Alhariri Portfolio", lifespan=lifespan)

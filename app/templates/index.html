@@ -12,19 +12,20 @@
 {%- endmacro %}
 
 {% block content %}
+  {% set display_name = pick(profile, 'name') or 'Mohammed Alhariri' %}
   <section class="hero" id="hero">
     {% if profile and profile.banner_url %}
       <div class="hero-banner" style="background-image: url('{{ asset_url(profile.banner_url) }}')" aria-hidden="true"></div>
     {% endif %}
     <div class="container hero-inner">
       {% if profile and profile.avatar_url %}
-        <img class="hero-avatar" src="{{ asset_url(profile.avatar_url) }}" alt="{{ profile.name }}" width="120" height="120">
+        <img class="hero-avatar" src="{{ asset_url(profile.avatar_url) }}" alt="{{ display_name }}" width="120" height="120">
       {% else %}
-        <div class="hero-avatar hero-avatar--placeholder" aria-hidden="true">{{ profile.name[:1] if profile else 'M' }}</div>
+        <div class="hero-avatar hero-avatar--placeholder" aria-hidden="true">{{ display_name[:1] }}</div>
       {% endif %}
       <div class="hero-text">
         <p class="hero-eyebrow mono">{{ t('hero.hello') }}</p>
-        <h1 class="hero-name">{{ profile.name if profile else 'Mohammed Alhariri' }}</h1>
+        <h1 class="hero-name">{{ display_name }}</h1>
         <p class="hero-title">{{ pick(profile, 'title') }}</p>
         <p class="hero-tagline">{{ pick(profile, 'tagline') }}</p>
         <div class="hero-ctas">

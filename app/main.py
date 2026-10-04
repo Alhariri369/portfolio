@@ -340,7 +340,7 @@ def project_detail(slug: str, request: Request, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404)
 
     profile = db.get(Profile, 1)
-    title = f"{pick_localized(project, 'title', lang)} — {profile.name if profile else ''}".rstrip(" —")
+    title = f"{pick_localized(project, 'title', lang)} — {pick_localized(profile, 'name', lang) if profile else ''}".rstrip(" —")
     meta_description = pick_localized(project, "summary", lang)
     og_image = _og_image(profile)
     if project.images:

@@ -1,4 +1,54 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="14" fill="#1C2430"/>
-  <text x="32" y="42" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#FAF9F6" text-anchor="middle">MH</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none">
+  <defs>
+    <linearGradient id="mark" x1="8" y1="112" x2="112" y2="8" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#064E3B"/>
+      <stop offset="1" stop-color="#172554"/>
+    </linearGradient>
+
+    <linearGradient id="accent" x1="20" y1="60" x2="100" y2="60" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#D9F99D"/>
+      <stop offset="1" stop-color="#ECFCCB"/>
+    </linearGradient>
+  </defs>
+
+  <rect
+    x="8"
+    y="8"
+    width="104"
+    height="104"
+    rx="26"
+    fill="url(#mark)"
+  />
+
+  <path
+    d="M29 43L17 60L29 77"
+    stroke="url(#accent)"
+    stroke-width="5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <path
+    d="M91 43L103 60L91 77"
+    stroke="url(#accent)"
+    stroke-width="5"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <path
+    d="M38 43V77M38 60H54M54 43V77"
+    stroke="#F8FAFC"
+    stroke-width="6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <path
+    d="M66 43V77H74C83 77 87 70 87 60C87 50 83 43 74 43H66Z"
+    stroke="#F8FAFC"
+    stroke-width="6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
 </svg>

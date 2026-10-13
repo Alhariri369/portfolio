@@ -292,6 +292,8 @@ async def app_middleware(request: Request, call_next):
             status_code=401,
             headers={"WWW-Authenticate": "Basic realm=portfolio-admin"},
         )
+    if request.url.path in ("/admin", "/admin/"):
+        return RedirectResponse("/admin/dashboard", status_code=302)
 
     token = _current_lang.set(get_lang(request))
     try:

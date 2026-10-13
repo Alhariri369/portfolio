@@ -11,12 +11,15 @@ import re
 import secrets
 import uuid
 from pathlib import Path
+from collections import Counter
+from datetime import datetime, timedelta, timezone
 
-from sqladmin import Admin, ModelView
+from sqlalchemy import func, select
 from sqladmin.fields import FileField
+from sqladmin import Admin, BaseView, ModelView, expose
 
 from app.config import ADMIN_PASSWORD, ADMIN_USERNAME
-from app.db import engine
+from app.db import SessionLocal, engine
 from app.models import (
     Certificate,
     ContactMessage,
@@ -242,11 +245,53 @@ class ContactMessageAdmin(ModelView, model=ContactMessage):
     can_edit = False
     can_delete = True
 
+class DashboardView(BaseView):
+    name = "Dashboard"
+    icon = "fa-solid fa-chart-line"
+
+    @expose("/dashboard", methods=["GET"])
+    async def dashboard(self, request):
+        since = datetime.now(timezone.utc) - timedelta(days=13)
+        with SessionLocal() as s:
+            def count(model, *where):
+                return s.scalar(select(func.count()).select_from(model).where(*where))
+
+            stats = {
+                "Projects": count(Project),
+                "Skills": count(Skill),
+                "Certificates": count(Certificate),
+                "Messages": count(ContactMessage, ContactMessage.is_spam.is_(False)),
+                "Spam blocked": count(ContactMessage, ContactMessage.is_spam.is_(True)),
+            }
+            latest = s.scalars(
+                select(ContactMessage)
+                .where(ContactMessage.is_spam.is_(False))
+                .order_by(ContactMessage.created_at.desc())
+                .limit(5)
+            ).all()
+            recent = s.scalars(
+                select(ContactMessage.created_at)
+                .where(ContactMessage.created_at >= since)
+            ).all()
+
+        per_day = Counter(d.date() for d in recent)
+        days = [(since + timedelta(days=i)).date() for i in range(14)]
+        return await self.templates.TemplateResponse(
+            request,
+            "sqladmin/dashboard.html",
+            {
+                "stats": stats,
+                "latest": latest,
+                "labels": [d.strftime("%b %d") for d in days],
+                "values": [per_day.get(d, 0) for d in days],
+            },
+        )
 
 def setup_admin(app) -> Admin:
     """Mount SQLAdmin at /admin and register every model."""
-    admin = Admin(app, engine, title="Portfolio Admin", base_url="/admin")
-    admin.add_view(ProfileAdmin)
+    admin = Admin(app, engine, title="Portfolio Admin", base_url="/admin", templates_dir=str(Path(__file__).resolve().parent / "templates"))
+    admin.add_view(DashboardView)   # first = top of sidebar
+admin.add_view(ProfileAdmin)
     admin.add_view(SkillAdmin)
     admin.add_view(ExperienceAdmin)
     admin.add_view(EducationAdmin)

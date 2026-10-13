@@ -112,7 +112,7 @@ class FileUploadMixin:
 
 class ProfileAdmin(FileUploadMixin, ModelView, model=Profile):
     file_columns = ("avatar_url", "banner_url", "resume_pdf_url", "og_image_url")
-    column_list = ["id", "name", "title_en", "email", "phone"]
+    column_list = ["id", "name_en", "title_en", "email", "phone"]
     form_columns = [
         "name_en",
         "name_ar",

@@ -291,7 +291,7 @@ def setup_admin(app) -> Admin:
     """Mount SQLAdmin at /admin and register every model."""
     admin = Admin(app, engine, title="Portfolio Admin", base_url="/admin", templates_dir=str(Path(__file__).resolve().parent / "templates"))
     admin.add_view(DashboardView)   # first = top of sidebar
-admin.add_view(ProfileAdmin)
+    admin.add_view(ProfileAdmin)
     admin.add_view(SkillAdmin)
     admin.add_view(ExperienceAdmin)
     admin.add_view(EducationAdmin)

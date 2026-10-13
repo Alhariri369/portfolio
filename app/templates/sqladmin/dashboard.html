@@ -1,31 +1,129 @@
 {% extends "sqladmin/layout.html" %}
 {% block content %}
 <div class="col-12">
+
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-3 gap-2">
+    <div>
+      <h2 class="mb-0">Dashboard</h2>
+      <div class="text-muted">Overview of your portfolio</div>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+      <a class="btn btn-outline-secondary" href="https://dash.cloudflare.com/" target="_blank" rel="noopener">
+        <i class="fa-solid fa-chart-simple me-1"></i> Traffic (Cloudflare)
+      </a>
+      <a class="btn btn-outline-primary" href="/admin/dashboard/export">
+        <i class="fa-solid fa-download me-1"></i> Dashboard export
+      </a>
+      <a class="btn btn-primary" href="/admin/dashboard/export/full">
+        <i class="fa-solid fa-file-export me-1"></i> Full export
+      </a>
+    </div>
+  </div>
+
+  <!-- KPI cards -->
   <div class="row row-cards">
-    {% for label, value in stats.items() %}
-    <div class="col-sm-6 col-lg">
-      <div class="card"><div class="card-body">
-        <div class="subheader">{{ label }}</div>
-        <div class="h1 mb-0">{{ value }}</div>
+    {% set cards = [
+      ("Projects", stats["Projects"], "fa-diagram-project"),
+      ("Skills", stats["Skills"], "fa-bolt"),
+      ("Certificates", stats["Certificates"], "fa-certificate"),
+      ("Messages", stats["Messages"], "fa-envelope"),
+      ("Spam blocked", stats["Spam blocked"], "fa-shield-halved"),
+    ] %}
+    {% for label, value, icon in cards %}
+    <div class="col-6 col-lg">
+      <div class="card"><div class="card-body d-flex align-items-center">
+        <span class="avatar bg-primary-lt me-3"><i class="fa-solid {{ icon }}"></i></span>
+        <div>
+          <div class="h2 mb-0">{{ value }}</div>
+          <div class="text-muted">{{ label }}</div>
+        </div>
       </div></div>
     </div>
     {% endfor %}
   </div>
 
-  <div class="card mt-3">
-    <div class="card-header"><h3 class="card-title">Messages, last 14 days</h3></div>
-    <div class="card-body"><canvas id="msgChart" height="80"></canvas></div>
+  <div class="row row-cards mt-1">
+    <!-- Messages trend -->
+    <div class="col-lg-8">
+      <div class="card h-100">
+        <div class="card-header">
+          <h3 class="card-title">Messages, last 14 days</h3>
+          <div class="ms-auto text-muted">
+            {{ this_week }} this week
+            {% if week_delta > 0 %}<span class="text-success">&#9650; {{ week_delta }}</span>
+            {% elif week_delta < 0 %}<span class="text-danger">&#9660; {{ -week_delta }}</span>
+            {% else %}<span>&#8212;</span>{% endif %}
+            vs last week
+          </div>
+        </div>
+        <div class="card-body"><canvas id="msgChart" height="110"></canvas></div>
+      </div>
+    </div>
+
+    <!-- Spam rate -->
+    <div class="col-lg-4">
+      <div class="card h-100">
+        <div class="card-header"><h3 class="card-title">Spam filter</h3></div>
+        <div class="card-body text-center">
+          <div class="display-4 fw-bold">{{ spam_rate }}%</div>
+          <div class="text-muted mb-3">of all submissions were blocked</div>
+          <div class="progress"><div class="progress-bar bg-danger" style="width: {{ spam_rate }}%"></div></div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="card mt-3">
-    <div class="card-header"><h3 class="card-title">Latest messages</h3></div>
-    <table class="table card-table">
-      {% for m in latest %}
-      <tr><td>{{ m.name }}</td><td>{{ m.subject or "-" }}</td><td>{{ m.created_at }}</td></tr>
-      {% else %}
-      <tr><td class="text-muted">No messages yet</td></tr>
-      {% endfor %}
-    </table>
+  <div class="row row-cards mt-1">
+    <!-- Skills by category -->
+    <div class="col-lg-4">
+      <div class="card h-100">
+        <div class="card-header"><h3 class="card-title">Skills by category</h3></div>
+        <div class="card-body">
+          {% if skill_values %}<canvas id="skillChart" height="200"></canvas>
+          {% else %}<div class="text-muted">No skills yet</div>{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Content health -->
+    <div class="col-lg-4">
+      <div class="card h-100">
+        <div class="card-header">
+          <h3 class="card-title">Content health</h3>
+          <div class="ms-auto fw-bold">{{ health_score }}%</div>
+        </div>
+        <div class="list-group list-group-flush">
+          {% for h in health %}
+          <div class="list-group-item d-flex align-items-center">
+            {% if h.ok %}<i class="fa-solid fa-circle-check text-success me-2"></i>
+            {% else %}<i class="fa-solid fa-circle-exclamation text-warning me-2"></i>{% endif %}
+            {{ h.label }}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Latest messages -->
+    <div class="col-lg-4">
+      <div class="card h-100">
+        <div class="card-header">
+          <h3 class="card-title">Latest messages</h3>
+          <a class="ms-auto" href="/admin/contact-message/list">View all</a>
+        </div>
+        <div class="list-group list-group-flush">
+          {% for m in latest %}
+          <div class="list-group-item">
+            <div class="fw-bold">{{ m.name }}</div>
+            <div class="text-muted text-truncate">{{ m.subject or m.email }}</div>
+            <div class="text-muted small">{{ m.created_at.strftime("%b %d, %H:%M") }}</div>
+          </div>
+          {% else %}
+          <div class="list-group-item text-muted">No messages yet</div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -35,9 +133,25 @@
     type: "bar",
     data: {
       labels: {{ labels|tojson }},
-      datasets: [{ label: "Messages", data: {{ values|tojson }} }]
+      datasets: [
+        { label: "Messages", data: {{ values|tojson }}, backgroundColor: "#206bc4" },
+        { label: "Spam", data: {{ spam_values|tojson }}, backgroundColor: "#d63939" }
+      ]
     },
-    options: { scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+    options: {
+      plugins: { legend: { position: "bottom" } },
+      scales: {
+        x: { stacked: true },
+        y: { stacked: true, beginAtZero: true, ticks: { precision: 0 } }
+      }
+    }
   });
+  {% if skill_values %}
+  new Chart(document.getElementById("skillChart"), {
+    type: "doughnut",
+    data: { labels: {{ skill_labels|tojson }}, datasets: [{ data: {{ skill_values|tojson }} }] },
+    options: { plugins: { legend: { position: "bottom" } } }
+  });
+  {% endif %}
 </script>
 {% endblock %}

@@ -1,9 +1,9 @@
 {% extends "sqladmin/layout.html" %}
 {% block content %}
 <div class="col-12">
-  <div class="row row-deck row-cards">
+  <div class="row row-cards">
     {% for label, value in stats.items() %}
-    <div class="col-sm-6 col-lg-3">
+    <div class="col-sm-6 col-lg">
       <div class="card"><div class="card-body">
         <div class="subheader">{{ label }}</div>
         <div class="h1 mb-0">{{ value }}</div>
@@ -13,12 +13,31 @@
   </div>
 
   <div class="card mt-3">
+    <div class="card-header"><h3 class="card-title">Messages, last 14 days</h3></div>
+    <div class="card-body"><canvas id="msgChart" height="80"></canvas></div>
+  </div>
+
+  <div class="card mt-3">
     <div class="card-header"><h3 class="card-title">Latest messages</h3></div>
     <table class="table card-table">
-      {% for m in messages %}
-      <tr><td>{{ m.name }}</td><td>{{ m.subject }}</td><td>{{ m.created_at }}</td></tr>
+      {% for m in latest %}
+      <tr><td>{{ m.name }}</td><td>{{ m.subject or "-" }}</td><td>{{ m.created_at }}</td></tr>
+      {% else %}
+      <tr><td class="text-muted">No messages yet</td></tr>
       {% endfor %}
     </table>
   </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1"></script>
+<script>
+  new Chart(document.getElementById("msgChart"), {
+    type: "bar",
+    data: {
+      labels: {{ labels|tojson }},
+      datasets: [{ label: "Messages", data: {{ values|tojson }} }]
+    },
+    options: { scales: { y: { beginAtZero: true, ticks: { precision: 0 } } } }
+  });
+</script>
 {% endblock %}

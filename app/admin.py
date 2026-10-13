@@ -15,8 +15,11 @@ from collections import Counter
 from datetime import datetime, timedelta, timezone
 
 from sqlalchemy import func, select
+from sqlalchemy import inspect as sa_inspect
 from sqladmin.fields import FileField
 from sqladmin import Admin, BaseView, ModelView, expose
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse
 
 from app.config import ADMIN_PASSWORD, ADMIN_USERNAME
 from app.db import SessionLocal, engine
@@ -33,6 +36,19 @@ from app.models import (
     Testimonial,
 )
 from app.storage import upload_fileobj
+
+
+def _all_columns(model) -> list[str]:
+    return [c.key for c in sa_inspect(model).mapper.column_attrs]
+
+class ExportMixin:
+    can_export = True
+    export_types = ["json"]          # use ["json", "csv"] if you want both
+
+    def __init__(self):
+        # must be set before ModelView.__init__ builds its export column list
+        self.column_export_list = _all_columns(self.model)
+        super().__init__()
 
 # Sentinel meaning "clear this file" (produced by the clear checkbox widget).
 _CLEAR = "__sqladmin_clear__"
@@ -113,7 +129,7 @@ class FileUploadMixin:
         await super().on_model_change(data, model, is_created, request)
 
 
-class ProfileAdmin(FileUploadMixin, ModelView, model=Profile):
+class ProfileAdmin(ExportMixin, FileUploadMixin, ModelView, model=Profile):
     file_columns = ("avatar_url", "banner_url", "resume_pdf_url", "og_image_url")
     column_list = ["id", "name_en", "title_en", "email", "phone"]
     form_columns = [
@@ -143,12 +159,12 @@ class ProfileAdmin(FileUploadMixin, ModelView, model=Profile):
     }
 
 
-class SkillAdmin(ModelView, model=Skill):
+class SkillAdmin(ExportMixin, ModelView, model=Skill):
     column_list = ["id", "name_en", "name_ar", "category", "sort_order"]
     form_columns = ["name_en", "name_ar", "category", "sort_order"]
 
 
-class ExperienceAdmin(ModelView, model=Experience):
+class ExperienceAdmin(ExportMixin, ModelView, model=Experience):
     column_list = [
         "id",
         "role_en",
@@ -173,7 +189,7 @@ class ExperienceAdmin(ModelView, model=Experience):
     ]
 
 
-class EducationAdmin(ModelView, model=Education):
+class EducationAdmin(ExportMixin, ModelView, model=Education):
     column_list = ["id", "degree_en", "institution_en", "start_date", "end_date"]
     form_columns = [
         "institution_en",
@@ -189,12 +205,12 @@ class EducationAdmin(ModelView, model=Education):
     ]
 
 
-class CertificateAdmin(ModelView, model=Certificate):
+class CertificateAdmin(ExportMixin, ModelView, model=Certificate):
     column_list = ["id", "name_en", "issuer_en", "issue_date"]
     form_columns = ["name_en", "name_ar", "issuer_en", "issuer_ar", "issue_date", "url"]
 
 
-class ProjectAdmin(ModelView, model=Project):
+class ProjectAdmin(ExportMixin, ModelView, model=Project):
     column_list = ["id", "slug", "title_en", "featured", "sort_order"]
     form_columns = [
         "slug",
@@ -212,19 +228,19 @@ class ProjectAdmin(ModelView, model=Project):
     ]
 
 
-class ProjectImageAdmin(FileUploadMixin, ModelView, model=ProjectImage):
+class ProjectImageAdmin(ExportMixin, FileUploadMixin, ModelView, model=ProjectImage):
     file_columns = ("url",)
     column_list = ["id", "project_id", "url", "sort_order"]
     form_columns = ["project", "url", "alt_en", "alt_ar", "sort_order"]
     form_overrides = {"url": R2FileField}
 
 
-class SocialLinkAdmin(ModelView, model=SocialLink):
+class SocialLinkAdmin(ExportMixin, ModelView, model=SocialLink):
     column_list = ["id", "platform", "url", "sort_order"]
     form_columns = ["platform", "url", "sort_order"]
 
 
-class TestimonialAdmin(ModelView, model=Testimonial):
+class TestimonialAdmin(ExportMixin, ModelView, model=Testimonial):
     column_list = ["id", "author_en", "role_en", "published"]
     form_columns = [
         "author_en",
@@ -237,14 +253,35 @@ class TestimonialAdmin(ModelView, model=Testimonial):
     ]
 
 
-class ContactMessageAdmin(ModelView, model=ContactMessage):
+class ContactMessageAdmin(ExportMixin, ModelView, model=ContactMessage):
     column_list = ["id", "created_at", "name", "email", "subject", "is_spam"]
     column_searchable_list = ["name", "email", "subject"]
     column_sortable_list = ["created_at", "is_spam"]
     can_create = False
     can_edit = False
     can_delete = True
+    
+    
+# Export dashboard and export everything
+# Start export helpers 
+EXPORT_MODELS = {
+    "profile": Profile, "skills": Skill, "experience": Experience,
+    "education": Education, "certificates": Certificate,
+    "projects": Project, "project_images": ProjectImage,
+    "social_links": SocialLink, "testimonials": Testimonial,
+    "contact_messages": ContactMessage,
+}
 
+def _json_download(payload: dict, filename: str) -> JSONResponse:
+    return JSONResponse(
+        jsonable_encoder(payload),
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+    )
+
+def _stamp() -> str:
+    return datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+# End export helpers 
+""" old
 class DashboardView(BaseView):
     name = "Dashboard"
     icon = "fa-solid fa-chart-line"
@@ -286,6 +323,76 @@ class DashboardView(BaseView):
                 "values": [per_day.get(d, 0) for d in days],
             },
         )
+"""
+
+class DashboardView(BaseView):
+    name = "Dashboard"
+    icon = "fa-solid fa-chart-line"
+
+    def _data(self):
+        since = datetime.now(timezone.utc) - timedelta(days=13)
+        with SessionLocal() as s:
+            def count(model, *where):
+                return s.scalar(select(func.count()).select_from(model).where(*where))
+
+            stats = {
+                "Projects": count(Project),
+                "Skills": count(Skill),
+                "Certificates": count(Certificate),
+                "Messages": count(ContactMessage, ContactMessage.is_spam.is_(False)),
+                "Spam blocked": count(ContactMessage, ContactMessage.is_spam.is_(True)),
+            }
+            latest = s.scalars(
+                select(ContactMessage).where(ContactMessage.is_spam.is_(False))
+                .order_by(ContactMessage.created_at.desc()).limit(5)
+            ).all()
+            recent = s.scalars(
+                select(ContactMessage.created_at).where(ContactMessage.created_at >= since)
+            ).all()
+            latest_rows = [
+                {"name": m.name, "email": m.email, "subject": m.subject,
+                 "created_at": m.created_at} for m in latest
+            ]
+        per_day = Counter(d.date() for d in recent)
+        days = [(since + timedelta(days=i)).date() for i in range(14)]
+        return {
+            "stats": stats,
+            "latest": latest_rows,
+            "labels": [d.strftime("%b %d") for d in days],
+            "values": [per_day.get(d, 0) for d in days],
+        }
+
+    @expose("/dashboard", methods=["GET"])
+    async def dashboard(self, request):
+        return await self.templates.TemplateResponse(
+            request, "sqladmin/dashboard.html", self._data()
+        )
+
+    @expose("/dashboard/export", methods=["GET"])
+    async def export_dashboard(self, request):
+        d = self._data()
+        payload = {
+            "exported_at": datetime.now(timezone.utc),
+            "stats": d["stats"],
+            "messages_per_day": dict(zip(d["labels"], d["values"])),
+            "latest_messages": d["latest"],
+        }
+        return _json_download(payload, f"dashboard-{_stamp()}.json")
+
+    @expose("/dashboard/export/full", methods=["GET"])
+    async def export_full(self, request):
+        payload = {"exported_at": datetime.now(timezone.utc)}
+        with SessionLocal() as s:
+            for key, model in EXPORT_MODELS.items():
+                cols = _all_columns(model)
+                rows = s.scalars(select(model).order_by(model.id)).all()
+                payload[key] = [{col: getattr(r, col) for col in cols} for r in rows]
+
+                if model is Project:
+                    for out, proj in zip(payload[key], rows):
+                        out["skills"] = [sk.name_en for sk in proj.skills]
+        return _json_download(payload, f"portfolio-full-{_stamp()}.json")
+
 
 def setup_admin(app) -> Admin:
     """Mount SQLAdmin at /admin and register every model."""

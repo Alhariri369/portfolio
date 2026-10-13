@@ -246,7 +246,7 @@ class ContactMessageAdmin(ModelView, model=ContactMessage):
 def setup_admin(app) -> Admin:
     """Mount SQLAdmin at /admin and register every model."""
     admin = Admin(app, engine, title="Portfolio Admin", base_url="/admin")
-    admin.add_base_view(ProfileAdmin)
+    admin.add_view(ProfileAdmin)
     admin.add_view(SkillAdmin)
     admin.add_view(ExperienceAdmin)
     admin.add_view(EducationAdmin)
